@@ -18,13 +18,13 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/contact',
+      path: '/contatti',
       name: 'contatti',
       component: ContactView,
     },
     {
-      path: '/normative',
-      name: 'normative',
+      path: '/servizi',
+      name: 'servizi',
       component: NormativeView,
     },
     {
