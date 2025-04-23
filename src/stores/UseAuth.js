@@ -11,20 +11,16 @@ export const useAuthStore = defineStore('auth', {
 
   getters: {
     isAuthenticated: (state) => !!state.token,
-    isClient: (state) => state.user.role === 'client',
     isAdmin: (state) => state.user.role === 'admin',
   },
 
   actions: {
-    // Call this method after a successful login.
     login(userData, token) {
       this.user = userData
       this.token = token
       localStorage.setItem('authToken', token)
       localStorage.setItem('authUser', JSON.stringify(userData))
     },
-
-    // Log out the user.
     logout() {
       this.user = { id: null, role: null }
       this.token = null
@@ -40,17 +36,6 @@ export const useAuthStore = defineStore('auth', {
         this.user = user
         this.token = token
       }
-    },
-
-    // Check if access to a particular page is allowed.
-    // For reserved clients page.
-    canAccessClientPage() {
-      return this.isAuthenticated && (this.isClient || this.isAdmin)
-    },
-
-    // For admin only page.
-    canAccessAdminPage() {
-      return this.isAuthenticated && this.isAdmin
     },
   },
 })

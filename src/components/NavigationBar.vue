@@ -67,13 +67,7 @@ const navigate = (routeName) => {
         Contatti
       </button>
       <button
-        @click="navigate('normative')"
-        class="block w-full text-left px-4 py-2 hover:bg-teal-500"
-      >
-        Normative
-      </button>
-      <button
-        @click="navigate('area-riservata')"
+        @click="navigate('/area-riservata')"
         class="block w-full text-left px-4 py-2 hover:bg-teal-500"
       >
         Area Riservata
