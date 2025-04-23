@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { db } from '../../firebase' // Ensure you import your Firebase database instance
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -15,12 +16,22 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    login(userData, token) {
+    async login(userData, token) {
       this.user = userData
       this.token = token
+
+      // Fetch the user role from Firebase to ensure it's accurate
+      const userDoc = await db.collection('users').doc(userData.id).get()
+      if (userDoc.exists) {
+        this.user.role = userDoc.data().role || 'client' // Default to 'client' if no role is found
+      } else {
+        this.user.role = 'client' // Default to 'client' if user is not found in the database
+      }
+
       localStorage.setItem('authToken', token)
       localStorage.setItem('authUser', JSON.stringify(userData))
     },
+
     logout() {
       this.user = { id: null, role: null }
       this.token = null

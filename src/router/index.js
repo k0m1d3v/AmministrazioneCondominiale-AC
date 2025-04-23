@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ContactView from '../views/ContactsView.vue'
-import NormativeView from '../views/NormativeView.vue'
 
 import { useAuthStore } from '@/stores/UseAuth'
 
-import NotFoundView from '../views/NotFoundView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 import AreaRiservata from '@/views/AreaRiservata.vue'
 import LoginView from '@/views/LoginView.vue'
+
+import AdminView from '@/views/AdministratorView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,14 +30,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/servizi',
-      name: 'servizi',
-      component: NormativeView,
-      meta: {
-        requiresAuth: false,
-      },
-    },
-    {
       path: '/login',
       name: 'login',
       component: LoginView,
@@ -45,11 +38,20 @@ const router = createRouter({
       },
     },
     {
-      path: '/areaRisevata',
+      path: '/areaRiservata',
       name: 'area-riservata',
       component: AreaRiservata,
       meta: {
         requiresAuth: true,
+      },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminView, // Add your admin component here
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: false, // Add the requiresAdmin meta
       },
     },
     {
@@ -68,10 +70,12 @@ router.beforeEach((to, from, next) => {
     auth.initializeAuth()
   }
 
+  // Check for authentication
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return next({ name: 'home' })
   }
 
+  // Check for admin access
   if (to.meta.requiresAdmin && !auth.isAdmin) {
     return next({ name: 'home' })
   }
